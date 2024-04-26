@@ -1,0 +1,43 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+    provider = "prisma-client-js"
+}
+
+datasource db {
+    provider = "postgresql"
+    url      = env("DATABASE_URL")
+}
+
+model Component {
+    id              Int @id @default(autoincrement()) 
+    name            String @unique
+    url             String
+    icon            String @default("/public/world.svg")
+    stacks          Stack[] 
+}
+
+model Tag {
+    id              Int @id @default(autoincrement())
+    name            String @unique
+    stacks          Stack[]
+}
+
+enum Visibility {
+    PUBLIC
+    PRIVATE
+	@@map("VISIBILITY")
+}
+
+model Stack {
+    id              Int @id @default(autoincrement())
+    visiblity       Visibility
+    name            String
+    components      Component[] 
+    initializer     String?
+    ownerId         String
+    tags            Tag[]
+    description     String
+    examples        String[]
+}

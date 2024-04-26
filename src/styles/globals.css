@@ -1,0 +1,17 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+.bg-anim {
+    /* The color values have been adjusted to valid CSS color values, and commas have been replaced with spaces to separate multiple values for linear-gradient. */
+    background: linear-gradient(to right, #EC4899 0%, #EF4444 25%, #EBAF0B 50%, #FFFFFF 51%, #FFFFFF 100%);
+    color: black;
+    background-size: 210% 100%;
+    background-position-x: right;
+    font-weight: 700;
+}
+
+.bg-anim:hover {
+    color: white;
+    background-position-x: left;
+}
