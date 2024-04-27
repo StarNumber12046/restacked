@@ -9,7 +9,7 @@ We try to keep this project as simple as possible, so you can start with just th
 If you are not familiar with the different technologies used in this project, please refer to the respective docs. If you still are in the wind, please join our [Discord](https://t3.gg/discord) and ask for help.
 
 - [Next.js](https://nextjs.org)
-- [NextAuth.js](https://next-auth.js.org)
+- [NextAuth.js](https://next-auth.js.org) (Clerk is better lol)
 - [Prisma](https://prisma.io)
 - [Drizzle](https://orm.drizzle.team)
 - [Tailwind CSS](https://tailwindcss.com)
@@ -27,3 +27,6 @@ You can check out the [create-t3-app GitHub repository](https://github.com/t3-os
 ## How do I deploy this?
 
 Follow our deployment guides for [Vercel](https://create.t3.gg/en/deployment/vercel), [Netlify](https://create.t3.gg/en/deployment/netlify) and [Docker](https://create.t3.gg/en/deployment/docker) for more information.
+
+## Dev and prod db
+Before deploying, please set the state of the databases to be equal, just in case :)
