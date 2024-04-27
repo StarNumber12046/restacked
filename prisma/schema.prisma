@@ -38,6 +38,4 @@ model Stack {
     initializer     String?
     ownerId         String
     tags            Tag[]
-    description     String
-    examples        String[]
 }

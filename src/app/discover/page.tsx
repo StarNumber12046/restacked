@@ -7,7 +7,7 @@ export default async function DiscoverPage() {
   return (
     <main className="justify-top flex h-[calc(100vh-4rem)] w-screen flex-col items-center gap-2 bg-black text-white">
       <h1 className="mt-4 text-6xl font-bold">Discover</h1>
-      <div className="flex flex-row flex-wrap">
+      <div className="flex flex-row flex-wrap gap-4">
         {publicStacks.map(async (stack) => (
           <div
             key={stack.id}
