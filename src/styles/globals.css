@@ -76,8 +76,12 @@
   }
 
   .bg-anim {
+    --first-color: #4ade80;
+    --second-color: #38bdf8;
+    --third-color: #8b5cf6;
     /* The color values have been adjusted to valid CSS color values, and commas have been replaced with spaces to separate multiple values for linear-gradient. */
-    background: linear-gradient(to right, #EC4899 0%, #EF4444 25%, #EBAF0B 50%, #FFFFFF 51%, #FFFFFF 100%);
+    /* Format for bg gradient: first second third *white* *white* */
+    background: linear-gradient(to right, var(--first-color) 0%, var(--second-color) 25%, var(--third-color) 50%, #FFFFFF 51%, #FFFFFF 100%);
     color: black;
     background-size: 210% 100%;
     background-position-x: right;
@@ -85,6 +89,6 @@
 }
 
 .bg-anim:hover {
-    color: white;
+    /* color: white; */
     background-position-x: left;
 }
