@@ -4,6 +4,7 @@ import { dark } from '@clerk/themes';
 
 import { Inter } from "next/font/google";
 import { TopNav } from "~/components/TopNav";
+import { Toaster } from "~/components/ui/sonner";
 
 const inter = Inter({
   subsets: ["latin"],
@@ -26,9 +27,10 @@ export default function RootLayout({
       baseTheme: dark
     }}>
       <html lang="en">
-        <body className={`font-sans ${inter.variable} h-screen w-screen bg-black text-white max-w-[100vh] flex-col`}>
+        <body className={`font-sans ${inter.variable} h-screen w-screen bg-black text-white max-w-[100vh] flex-col dark`}>
           <TopNav />
           {children}
+          <Toaster richColors />
           </body>
       </html>
     </ClerkProvider>

@@ -4,16 +4,25 @@ import { useRef, useState } from "react";
 import { Input } from "~/components/ui/input";
 import { Label } from "~/components/ui/label";
 import MultipleSelector, { type MultipleSelectorRef, type Option } from "~/components/ui/multiselect";
-
+import { toast } from "sonner"
 export default function Form({ components, tags }: { components: Option[], tags: Option[] }) {
   const componentsRef = useRef<MultipleSelectorRef>(null);
   const auth = useAuth();
   const tagsRef = useRef<MultipleSelectorRef>(null);
   const [init, setInit] = useState("");
   const [name, setName] = useState("");
+  
   function submitEvent(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
-
+    toast.dismiss("status")
+    if (componentsRef.current?.selectedValue.length === 0) {
+      toast.error("Error", { description: "You need to select at least one component", icon: "❌", id: "status", closeButton: true });
+      return;
+    }
+    if (tagsRef.current?.selectedValue.length === 0) {
+      toast.error("Error", { description: "You need to select at least one tag", icon: "❌", id: "status", closeButton: true });
+      return;
+    }
     fetch("/api/stack", {
       method: "PUT",
       body: JSON.stringify({
@@ -23,7 +32,10 @@ export default function Form({ components, tags }: { components: Option[], tags:
         ownerId: auth.userId,
         initializer: init
       })},
-    ).then(() => window.location.reload()).catch(console.error);
+    ).then(() => {
+      window.location.reload();
+      toast.success("Success", { description: "Stack created", icon: "✅", id: "status", closeButton: true });
+    }).catch(console.error);
   }
   return (
     <form className="flex flex-col gap-2 dark" onSubmit={submitEvent}>
@@ -31,6 +43,7 @@ export default function Form({ components, tags }: { components: Option[], tags:
         <Label htmlFor="name">Name</Label>
         <Input
           id="name"
+          required
           value={name}
           onChange={(e) => setName(e.target.value)}
           type="text"
@@ -39,6 +52,7 @@ export default function Form({ components, tags }: { components: Option[], tags:
         />
       </div>
         <MultipleSelector
+          
           ref={componentsRef}
           defaultOptions={components}
           placeholder="Components"
