@@ -1,10 +1,11 @@
 import "~/styles/globals.css";
 import { ClerkProvider } from "@clerk/nextjs";
-import { dark } from '@clerk/themes';
+import { dark } from "@clerk/themes";
 
 import { Inter } from "next/font/google";
 import { TopNav } from "~/components/TopNav";
 import { Toaster } from "~/components/ui/sonner";
+import { CSPostHogProvider } from "./_analytics/providers";
 
 const inter = Inter({
   subsets: ["latin"],
@@ -23,16 +24,22 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <ClerkProvider appearance={{
-      baseTheme: dark
-    }}>
-      <html lang="en">
-        <body className={`font-sans ${inter.variable} h-screen w-screen bg-black text-white max-w-[100vh] flex-col dark`}>
-          <TopNav />
-          {children}
-          <Toaster richColors />
+    <ClerkProvider
+      appearance={{
+        baseTheme: dark,
+      }}
+    >
+      <CSPostHogProvider>
+        <html lang="en">
+          <body
+            className={`font-sans ${inter.variable} dark h-screen w-screen max-w-[100vh] flex-col bg-black text-white`}
+          >
+            <TopNav />
+            {children}
+            <Toaster richColors />
           </body>
-      </html>
+        </html>
+      </CSPostHogProvider>
     </ClerkProvider>
   );
 }
