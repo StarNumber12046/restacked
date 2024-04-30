@@ -1,6 +1,7 @@
 "use client";
-import { SignInButton, SignedOut, SignedIn, UserButton } from "@clerk/nextjs";
 import Link from "next/link";
+import { ProfileButton } from "./Account";
+import { SignInButton, SignedIn, SignedOut } from "@clerk/nextjs";
 
 
 export function TopNav() {
@@ -15,7 +16,7 @@ export function TopNav() {
           <SignInButton />
         </SignedOut>
         <SignedIn>
-          <UserButton />
+          <ProfileButton />
         </SignedIn>
       </div>
     </nav>
