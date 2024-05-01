@@ -32,7 +32,7 @@ export default function RootLayout({
       <CSPostHogProvider>
         <html lang="en">
           <body
-            className={`font-sans ${inter.variable} dark h-screen w-screen max-w-[100vh] flex-col bg-black text-white`}
+            className={`font-sans ${inter.variable} dark h-screen w-screen max-w-[100vh] flex-col bg-background text-white`}
           >
             <TopNav />
             {children}

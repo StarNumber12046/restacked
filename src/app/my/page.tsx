@@ -12,7 +12,7 @@ export default async function Page() {
   const { userId } = auth();
   const stacks = await getMyStacks(userId?.toString() ?? "");
   return (
-    <main className="justify-top flex h-[calc(100vh-4rem)] w-screen flex-col items-center gap-2 bg-black text-white">
+    <main className="justify-top flex h-[calc(100vh-4rem)] w-screen flex-col items-center gap-2 bg-background text-white">
       <h1 className="mt-4 text-4xl font-bold">Your stacks</h1>
       <div className="flex flex-row flex-wrap gap-4">
         {stacks.map(async (stack) => (
