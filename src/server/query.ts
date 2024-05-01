@@ -2,7 +2,7 @@
 import "server-only";
 import { db } from "./db";
 import type { Stack } from "@prisma/client";
-import { clerkClient } from "@clerk/nextjs/server";
+import { auth, clerkClient } from "@clerk/nextjs/server";
 import type { Option } from "~/components/ui/multiselect";
 
 type StackWithComponents = Stack & {
@@ -13,6 +13,20 @@ export async function getPublicStacks() {
   const items: Stack[] = await db.stack.findMany({
     where: {
       visiblity: "PUBLIC",
+    },
+    include: {
+      components: true,
+      tags: true,
+    },
+  });
+
+  return items as unknown as StackWithComponents[];
+}
+
+export async function getMyStacks(userId: string) {
+  const items: Stack[] = await db.stack.findMany({
+    where: {
+      ownerId: userId,
     },
     include: {
       components: true,
@@ -80,6 +94,23 @@ export async function createStack(
       tags: {
         connect: actual_tags.map((tag) => ({ id: tag.id })),
       },
+    },
+  });
+}
+
+export async function deleteStack(id: number) {
+  const stack = await db.stack.findUnique({
+    where: {
+      id: id,
+    },
+  })
+  const { userId } = auth();
+  if (stack?.ownerId !== userId) {
+    throw new Error("Not authorized");
+  }
+  await db.stack.delete({
+    where: {
+      id: id,
     },
   });
 }

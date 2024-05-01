@@ -31,7 +31,7 @@ function ProfileDialog({ children }: { children: React.ReactNode }) {
             <Plus />
             <span className="ml-2">New Stack</span>
           </DropdownMenuItem>
-          <DropdownMenuItem>
+          <DropdownMenuItem onClick={() => router.push("/my")}>
             <User />
             <span className="ml-2">My Stacks</span>
           </DropdownMenuItem>
