@@ -20,7 +20,7 @@ export default async function Page() {
             <div className="opacity-0 transition-opacity duration-250 ease-in-out relative mr-2 mt-2 flex flex-row justify-end gap-2 justify-self-end group-hover:opacity-100">
                 <div className="fixed inline-flex gap-2">
 
-              <EditButton />
+              <EditButton stackId={stack.id} />
               <DeleteButton stackId={stack.id} />
                 </div>
             </div>

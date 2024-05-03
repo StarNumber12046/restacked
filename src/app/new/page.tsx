@@ -1,7 +1,7 @@
 import { auth } from "@clerk/nextjs/server";
 import { getComponents, getTags } from "~/server/query";
 import { RedirectToSignIn } from "@clerk/nextjs";
-import CreateForm from "./_components/form";
+import CreateForm from "../../components/form";
 
 export default async function Page() {
   const { userId } = auth();

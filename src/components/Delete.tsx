@@ -22,11 +22,11 @@ export function DeleteButton({ stackId }: { stackId: number }) {
 
 }
 
-export function EditButton() {
-
+export function EditButton({ stackId }: { stackId: number }) {
+  const router = useRouter();
   return (
     <div className="">
-        <button className="p-1 rounded bg-blue-500" onClick={async () => console.log("WIP")}>
+        <button className="p-1 rounded bg-blue-500" onClick={async () => router.push(`/edit/${stackId}`)}>
           <Pencil />
         </button>
     </div>

@@ -114,3 +114,66 @@ export async function deleteStack(id: number) {
     },
   });
 }
+
+export async function getStack(id: string) {
+  const stack = await db.stack.findUnique({
+    where: {
+      id: Number(id),
+    },
+    include: {
+      components: true,
+      tags: true,
+    },
+  });
+  return stack as unknown as StackWithComponents;
+}
+
+export async function updateStack(
+  id: string,
+  name: string,
+  components: Option[],
+  tags: Option[],
+  ownerId: string,
+  initializer?: string,
+) {
+  const existing_tags_data = await db.tag.findMany({
+    where: {
+      id: {
+        in: tags.map((tag) => Number(tag.value)).filter((tag) => !isNaN(tag)),
+      },
+    },
+  });
+
+  const tag_names = tags.map((tag) => tag.label);
+  const existing_tags = existing_tags_data.map((tag) => tag.id);
+  const new_tags = tags.filter(
+    (tag) => !existing_tags.includes(Number(tag.value)),
+  );
+
+  await db.tag.createMany({
+    data: new_tags.map((tag) => ({ name: tag.label })),
+  });
+  const actual_tags = (await db.tag.findMany()).filter((tag) =>
+    tag_names.includes(tag.name),
+  );
+
+  await db.stack.update({
+    where: {
+      id: Number(id),
+    },
+    data: {
+      name: name,
+      initializer: initializer,
+      ownerId: ownerId,
+      visiblity: "PUBLIC",
+      components: {
+        connect: components.map((component) => ({
+          id: Number(component.value),
+        })),
+      },
+      tags: {
+        connect: actual_tags.map((tag) => ({ id: tag.id })),
+      },
+    },
+  });
+}
