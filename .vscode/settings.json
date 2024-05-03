@@ -1,15 +1,4 @@
 {
     "typescript.tsdk": "node_modules/typescript/lib",
-    "sqltools.connections": [
-        {
-            "previewLimit": 50,
-            "server": "localhost",
-            "port": 5432,
-            "driver": "PostgreSQL",
-            "name": "ReStacked Dev",
-            "database": "restacked",
-            "password": "MqvliyDVsGNewteJ",
-            "username": "postgres"
-        }
-    ]
+    "sqltools.connections": []
 }
