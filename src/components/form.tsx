@@ -119,7 +119,8 @@ export function EditForm({ components, tags, stack }: { components: Option[], ta
         initializer: init
       })},
     ).then(() => {
-      router.push("/stack/"+stack.id+"")
+      router.push("/my")
+      // router.push("/stack/"+stack.id+"")
       toast.success("Success", { description: "Stack updated", icon: "✅", id: "status", closeButton: true });
     }).catch(console.error);
   }
