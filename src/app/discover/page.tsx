@@ -1,5 +1,3 @@
-import Image from "next/image";
-import { CopyButton } from "~/components/Buttons";
 import { VoteBox } from "~/components/Vote";
 import { Initializer, StackComponents, StackHeader, Tags } from "../../components/StackCard";
 import { Card, CardContent } from "~/components/ui/card";

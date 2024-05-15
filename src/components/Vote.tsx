@@ -1,6 +1,6 @@
 "use client"
 
-import { useAuth } from "@clerk/nextjs"
+import { useAuth, useClerk } from "@clerk/nextjs"
 import { VoteType, type Stack } from "@prisma/client"
 import { ArrowBigUpIcon, ArrowBigDownIcon } from "lucide-react"
 import { useState } from "react"
@@ -20,13 +20,16 @@ function DownvoteButton({ className, onClick }: { className?: string, onClick: (
 
 export function VoteBox({ stack }: { stack: StackWithComponents }) {
     const auth = useAuth();
+    const clerk = useClerk();
     const upvotes = stack.votes.filter((value) => {return value.type == VoteType.UPVOTE})
     const downvotes = stack.votes.filter((value) => {return value.type == VoteType.DOWNVOTE})
     const [upvoted, setUpvoted] = useState(upvotes.filter((value) => {return value.userId == auth.userId}).length > 0)
     const [downvoted, setDownvoted] = useState(downvotes.filter((value) => {return value.userId == auth.userId}).length > 0)
     const [votes, setVotes] = useState(upvotes.length-downvotes.length)
     const handleUpvote = () => {
-        
+        if (!auth.isSignedIn) {
+            clerk.openSignIn();
+        }
         if (upvoted) {
             setUpvoted(false)
             fetch(`/api/stack/${stack.id}/vote`, {
@@ -51,6 +54,9 @@ export function VoteBox({ stack }: { stack: StackWithComponents }) {
     }
 
     const handleDownvote = () => {
+        if (!auth.isSignedIn) {
+            clerk.openSignIn();
+        }
         if (downvoted) {
             setDownvoted(false)
             fetch(`/api/stack/${stack.id}/vote`, {
