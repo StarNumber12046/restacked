@@ -7,6 +7,7 @@ import { auth } from "@clerk/nextjs/server";
 import { Earth, Lock } from "lucide-react";
 import { Visibility } from "@prisma/client";
 import { DeleteButton, EditButton } from "~/components/Delete";
+import { Initializer, StackComponents, Tags } from "~/components/StackCard";
 
 export default async function Page() {
   const { userId } = auth();
@@ -35,31 +36,14 @@ export default async function Page() {
               </CardTitle>
             </CardHeader>
             <CardContent>
-              <h2 className="text-xl font-semibold">Tags</h2>
-              <div className="flex flex-wrap gap-1">
-                {stack.tags.map((tag) => (
-                  <Badge key={tag.name}>{tag.name}</Badge>
-                ))}
-              </div>
+              <Tags stack={stack} />
               <h2 className="text-xl font-semibold">Components</h2>
               <div className="flex flex-wrap gap-2">
-                {stack.components.map((component) => (
-                  <Image
-                    key={component.id}
-                    src={component.icon}
-                    alt={component.name}
-                    width={32}
-                    height={32}
-                    style={{ objectFit: "contain" }}
-                  />
-                ))}
+                <StackComponents stack={stack} />
               </div>
               {stack.initializer && (
                 <div className="my-2">
-                  <code className="relative flex flex-row flex-nowrap break-all rounded bg-neutral-900 px-4 py-2 text-gray-200 transition hover:bg-neutral-800">
-                    {stack.initializer}
-                    <CopyButton text={stack.initializer} />
-                  </code>
+                  <Initializer stack={stack} />
                 </div>
               )}
             </CardContent>

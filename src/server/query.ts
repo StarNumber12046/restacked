@@ -1,13 +1,14 @@
 "use server";
 import "server-only";
 import { db } from "./db";
-import type { Stack } from "@prisma/client";
+import type { Stack, Vote } from "@prisma/client";
 import { auth, clerkClient } from "@clerk/nextjs/server";
 import type { Option } from "~/components/ui/multiselect";
+import type { VoteType } from "@prisma/client";
 
-type StackWithComponents = Stack & {
-  components: { id: string; name: string; icon: string }[];
-} & { tags: { name: string; id: string }[] };
+export type StackWithComponents = Stack & {
+  components: { id: string; name: string; icon: string, description: string }[];
+} & { tags: { name: string; id: string }[] } & { votes: Vote[] };
 
 export async function getPublicStacks() {
   const items: Stack[] = await db.stack.findMany({
@@ -17,6 +18,7 @@ export async function getPublicStacks() {
     include: {
       components: true,
       tags: true,
+      votes: true,
     },
   });
 
@@ -176,4 +178,51 @@ export async function updateStack(
       },
     },
   });
+}
+
+
+export async function updateVote(stackId: number, type?: VoteType) {
+  const userId = auth().userId;
+  if (!userId) {
+    throw new Error("Unauthorized");
+  }
+  if (!type) {
+    await db.vote.deleteMany(
+      {
+        where: {
+            stackId: stackId,
+            userId: userId,
+          },
+      }
+    )
+    return;
+  }
+  // Check if the user has already voted on this stack
+  const existingVote = await db.vote.findFirst({
+    where: {
+      stackId: stackId,
+      userId: userId,
+    },
+  });
+
+  if (existingVote) {
+    // Update existing vote
+    await db.vote.update({
+      where: {
+        id: existingVote.id,
+      },
+      data: {
+        type: type,
+      },
+    });
+  } else {
+    // Create new vote
+    await db.vote.create({
+      data: {
+        type: type,
+        userId: userId,
+        stackId: stackId,
+      },
+    });
+  }
 }

@@ -1,8 +1,13 @@
 import Image from "next/image";
 import { CopyButton } from "~/components/Buttons";
-import { Badge } from "~/components/ui/badge";
-import { Card, CardContent, CardHeader, CardTitle } from "~/components/ui/card";
-import { getPublicStacks, getUserAvatar } from "~/server/query";
+import { VoteBox } from "~/components/Vote";
+import { Initializer, StackComponents, StackHeader, Tags } from "../../components/StackCard";
+import { Card, CardContent } from "~/components/ui/card";
+import {
+  getPublicStacks,
+} from "~/server/query";
+
+
 
 export default async function DiscoverPage() {
   const publicStacks = await getPublicStacks();
@@ -11,55 +16,20 @@ export default async function DiscoverPage() {
       <h1 className="mt-4 text-4xl font-bold">Discover</h1>
       <div className="flex flex-row flex-wrap gap-4">
         {publicStacks.map(async (stack) => (
-          <Card key={stack.id} className="w-64">
-            <CardHeader>
-              <CardTitle className="inline-flex gap-2">
+          <Card key={stack.id} className="w-64 flex-col flex-grow flex">
+            <StackHeader stack={stack} />
+            <CardContent className="flex flex-1 flex-col justify-between flex-grow">
+              <div>
 
-
-              <Image
-                src={(await getUserAvatar(stack.ownerId)) || ""}
-                alt="User Avatar"
-                width={32}
-                height={32}
-                style={{ objectFit: "contain" }}
-                />
-              <span className="w-40 break-words text-3xl font-bold">
-                {stack.name}
-              </span>
-                </CardTitle>
-            </CardHeader>
-            <CardContent>
-              <h2 className="text-xl font-semibold">Tags</h2>
-              <div className="flex flex-wrap gap-1">
-                {stack.tags.map((tag) => (
-                  <Badge
-                    key={tag.name}
-                  >
-                    {tag.name}
-                  </Badge>
-                ))}
-              </div>
+              <Tags stack={stack} />
               <h2 className="text-xl font-semibold">Components</h2>
-              <div className="flex flex-wrap gap-2">
-                {stack.components.map((component) => (
-                  <Image
-                    key={component.id}
-                    src={component.icon}
-                    alt={component.name}
-                    width={32}
-                    height={32}
-                    style={{ objectFit: "contain" }}
-                  />
-                ))}
+              <StackComponents stack={stack} />
               </div>
-              {stack.initializer && (
-                <div className="my-2">
-                  <code className="relative flex flex-row flex-nowrap break-all rounded bg-neutral-900 px-4 py-2 text-gray-200 transition hover:bg-neutral-800">
-                    {stack.initializer}
-                    <CopyButton text={stack.initializer} />
-                  </code>
-                </div>
-              )}
+              <div />
+              <div className="">
+                <Initializer stack={stack} />
+                <VoteBox stack={stack} />
+              </div>
             </CardContent>
           </Card>
         ))}
@@ -68,3 +38,5 @@ export default async function DiscoverPage() {
     </main>
   );
 }
+
+

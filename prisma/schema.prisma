@@ -16,6 +16,7 @@ model Component {
     url             String
     icon            String @default("/public/world.svg")
     stacks          Stack[] 
+    description     String @default("")
 }
 
 model Tag {
@@ -30,6 +31,12 @@ enum Visibility {
 	@@map("VISIBILITY")
 }
 
+enum VoteType {
+    UPVOTE
+    DOWNVOTE
+    @@map("VOTETYPE")
+}
+
 model Stack {
     id              Int @id @default(autoincrement())
     visiblity       Visibility
@@ -38,4 +45,13 @@ model Stack {
     initializer     String?
     ownerId         String
     tags            Tag[]
+    votes           Vote[] 
+}
+
+model Vote {
+    id              BigInt @unique @default(autoincrement())
+    type            VoteType
+    userId          String
+    stack           Stack @relation(fields: [stackId], references: [id]) // fields: fields of this model, references: foreign model (I always forget lol)
+    stackId         Int 
 }
