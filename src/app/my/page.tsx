@@ -1,19 +1,32 @@
-import { getMyStacks, getUserAvatar } from "~/server/query";
-import Image from "next/image";
-import { CopyButton } from "~/components/Buttons";
-import { Badge } from "~/components/ui/badge";
+import { getMyStacks } from "~/server/query";
 import { Card, CardContent, CardHeader, CardTitle } from "~/components/ui/card";
 import { auth } from "@clerk/nextjs/server";
 import { Earth, Lock } from "lucide-react";
 import { Visibility } from "@prisma/client";
 import { DeleteButton, EditButton } from "~/components/Delete";
 import { Initializer, StackComponents, Tags } from "~/components/StackCard";
+import { RedirectToSignIn } from "@clerk/nextjs";
 
 export default async function Page() {
   const { userId } = auth();
-  const stacks = await getMyStacks(userId?.toString() ?? "");
+
+  if (!userId) {
+    return <RedirectToSignIn />;
+  } 
+  let stacks;
+  try {
+    stacks = await getMyStacks();
+  }
+  catch (e) {
+    const error: Error = e as Error
+    if (error.message == "Too many requests") {
+      return "🚧 Too many requests! Please slow down"
+    }
+    return "Error fetching stacks, please reload!"
+  }
   return (
     <main className="justify-top flex h-[calc(100vh-4rem)] w-screen flex-col items-center gap-2 bg-background text-white">
+      
       <h1 className="mt-4 text-4xl font-bold">Your stacks</h1>
       <div className="flex flex-row flex-wrap gap-4">
         {stacks.map(async (stack) => (

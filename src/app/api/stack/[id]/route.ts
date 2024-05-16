@@ -14,6 +14,9 @@ export async function PATCH(
   request: Request,
   { params }: { params: { id: string } },
 ) {
+  if (!auth().userId) {
+    return new Response("Unauthorized", { status: 401 });
+  }
   if (!request.body) {
     return new Response("No body", { status: 400 });
   }
